@@ -1,0 +1,30 @@
+{
+  "name": "iheart.now.sh",
+  "version": "1.0.0",
+  "description": "iHeart Radio Web App using Next.js",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": [
+    "iheart",
+    "radio",
+    "next.js"
+  ],
+  "author": "Nathan Rajlich <n@n8.io>",
+  "license": "MIT",
+  "now": {
+    "alias": "iheart.now.sh"
+  },
+  "dependencies": {
+    "debounce": "^1.0.2",
+    "debug": "^2.6.6",
+    "iheart": "^1.0.1",
+    "next": "^2.3.1",
+    "prop-types": "^15.5.8",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  }
+}
