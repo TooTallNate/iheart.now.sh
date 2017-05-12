@@ -16,6 +16,7 @@
   "author": "Nathan Rajlich <n@n8.io>",
   "license": "MIT",
   "now": {
+    "public": true,
     "alias": "iheart.now.sh"
   },
   "dependencies": {
