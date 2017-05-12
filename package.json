@@ -4,9 +4,9 @@
   "description": "iHeart Radio Web App using Next.js",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start"
+    "start": "NODE_ENV=production node server.js"
   },
   "keywords": [
     "iheart",
@@ -22,6 +22,7 @@
     "debounce": "^1.0.2",
     "debug": "^2.6.6",
     "iheart": "^1.0.1",
+    "micro": "^7.3.3",
     "next": "^2.3.1",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",

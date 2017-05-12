@@ -18,7 +18,6 @@ export default class Search extends React.Component {
     this.audio = null
 
     this.state = {
-      streams: null,
       nowPlaying: null
     }
 
@@ -30,41 +29,18 @@ export default class Search extends React.Component {
     let { search } = query
     if (!search) {
       search = '107.7'
+      debug('using default search value: %o', search)
     }
     const { stations } = await iheart.search(search)
     return { stations, search }
   }
 
-  async loadStream(stationId) {
-    const { streams } = this.state
-    if (streams.has(stationId)) return
-
-    const stream = (await iheart.streams(stationId))[0]
-
-    const urlPromise = iheart.streamURL(stream)
-    streams.set(stationId, urlPromise)
-    this.setState({ streams })
-
-    const url = await urlPromise
-    debug('loaded stream URL: %o', url)
-
-    streams.set(stationId, url)
-    this.setState({ streams })
-  }
-
   componentDidMount() {
     this.audio = new Audio
-    this.setState({
-      streams: new Map
-    })
   }
 
   componentDidUpdate(prevProps) {
     console.log('componentDidUpdate', prevProps.search, this.props.search)
-
-    for (const station of this.props.stations) {
-      this.loadStream(station.id)
-    }
   }
 
   onSearchInput(err, value) {
@@ -76,7 +52,7 @@ export default class Search extends React.Component {
 
     this.stop()
 
-    const url = this.state.streams.get(id)
+    const url = `/stream/${id}`
     this.audio.src = url
     this.audio.play()
 
