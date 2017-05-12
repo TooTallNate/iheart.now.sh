@@ -39,8 +39,8 @@ export default class Search extends React.Component {
     this.audio = new Audio
   }
 
-  componentDidUpdate(prevProps) {
-    console.log('componentDidUpdate', prevProps.search, this.props.search)
+  componentWillUnmount() {
+    this.stop()
   }
 
   onSearchInput(err, value) {
