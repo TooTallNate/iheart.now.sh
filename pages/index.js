@@ -28,7 +28,7 @@ export default class Search extends React.Component {
   static async getInitialProps ({ query }) {
     let { search } = query
     if (!search) {
-      search = '107.7'
+      search = 'San Francisco'
       debug('using default search value: %o', search)
     }
     const { stations } = await iheart.search(search)
