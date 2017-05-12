@@ -1,10 +1,18 @@
 import React from 'react'
 
+import { COLOR_SUCCESS } from './css-config'
+
 export default class Station extends React.Component {
   render () {
     const { station } = this.props
+
+    let className = 'station'
+    if (this.props.nowPlaying) {
+      className += ' now-playing'
+    }
+
     return (
-      <div className="station" onClick={ this.props.onClick } data-id={ station.id }>
+      <div className={ className } onClick={ this.props.onClick } data-id={ station.id }>
         <img className="logo" src={ station.newlogo } />
         <h2>{ station.name }</h2>
         <h3>{ station.description }</h3>
@@ -12,10 +20,22 @@ export default class Station extends React.Component {
 
         <style jsx>{`
           .station {
-            border: solid 1px #eee;
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            border: solid 1px transparent;
             display: inline-block;
             margin: 1em;
+            padding: 0.5em;
+            transition: border-color 100ms ease-in;
             width: 400px;
+          }
+
+          .station:hover {
+            border-color: #777;
+          }
+
+          .station.now-playing {
+            border-color: ${COLOR_SUCCESS};
           }
 
           .logo {

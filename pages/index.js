@@ -20,6 +20,7 @@ export default class Search extends React.Component {
       nowPlaying: null
     }
 
+    this.onPlayClick = this.onPlayClick.bind(this)
     this.onSearchInput = debounce(this.onSearchInput.bind(this), 200)
   }
 
@@ -62,7 +63,8 @@ export default class Search extends React.Component {
   }
 
   stop() {
-    this.audio.stop()
+    this.audio.pause()
+    this.audio.currentTime = 0
     this.setState({
       nowPlaying: null
     })
@@ -75,6 +77,7 @@ export default class Search extends React.Component {
         <h1>iHeart Radio Search</h1>
 
         <Input
+          className="search"
           autofocus
           centered
           select
@@ -96,6 +99,10 @@ export default class Search extends React.Component {
         <style jsx>{`
           div {
             font-family: ${FONT_FAMILY_SANS};
+          }
+
+          .search {
+            margin: 1em;
           }
         `}</style>
       </div>
