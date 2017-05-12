@@ -18,8 +18,8 @@ export default class Search extends React.Component {
     this.audio = null
 
     this.state = {
-      nowPlaying: null,
-      streams: null
+      streams: null,
+      nowPlaying: null
     }
 
     this.onPlayClick = this.onPlayClick.bind(this)
@@ -36,26 +36,34 @@ export default class Search extends React.Component {
   }
 
   async loadStream(stationId) {
+    const { streams } = this.state
+    if (streams.has(stationId)) return
+
     const stream = (await iheart.streams(stationId))[0]
 
-    const url = await iheart.streamURL(stream)
+    const urlPromise = iheart.streamURL(stream)
+    streams.set(stationId, urlPromise)
+    this.setState({ streams })
+
+    const url = await urlPromise
     debug('loaded stream URL: %o', url)
 
-    const { streams } = this.state
     streams.set(stationId, url)
     this.setState({ streams })
   }
 
   componentDidMount() {
-    this.audio = new Audio()
+    this.audio = new Audio
     this.setState({
       streams: new Map
     })
-    if (this.props.stations) {
-      for (const station of this.props.stations) {
-        console.log(station)
-        this.loadStream(station.id)
-      }
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log('componentDidUpdate', prevProps.search, this.props.search)
+
+    for (const station of this.props.stations) {
+      this.loadStream(station.id)
     }
   }
 
@@ -92,7 +100,7 @@ export default class Search extends React.Component {
         <Head>
           <title>iHeart Radio Search</title>
           <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width; height=device-height" />
+          <meta name="viewport" content="width=device-width, height=device-height" />
         </Head>
 
         <h1>iHeart Radio Search</h1>
