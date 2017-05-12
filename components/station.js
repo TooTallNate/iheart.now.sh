@@ -11,9 +11,11 @@ export default class Station extends React.Component {
       className += ' now-playing'
     }
 
+    let logo = `https://cors.now.sh/${station.newlogo}`
+
     return (
       <div className={ className } onClick={ this.props.onClick } data-id={ station.id }>
-        <img className="logo" src={ station.newlogo } />
+        <img className="logo" src={ logo } />
         <h2>{ station.name }</h2>
         <h3>{ station.description }</h3>
         <div>{ `${station.callLetters} - ${station.city}, ${station.state}` }</div>
