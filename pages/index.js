@@ -78,7 +78,7 @@ export default class Search extends React.Component {
       title = 'iHeart Radio Search'
     }
     return (
-      <div style={{ textAlign: 'center', padding: 40 }}>
+      <div className="root">
         <Head>
           <title>{ title }</title>
           <meta charset="UTF-8" />
@@ -108,12 +108,23 @@ export default class Search extends React.Component {
         ))}
 
         <style jsx>{`
-          div {
+          div, h1, h2 {
             font-family: ${FONT_FAMILY_SANS};
+          }
+
+          .root {
+            text-align: center;
+            padding: 40px;
           }
 
           .search {
             margin: 1em;
+          }
+
+          @media only screen and (max-width: 540px) {
+            .root {
+              padding: 10px;
+            }
           }
         `}</style>
       </div>

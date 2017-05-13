@@ -43,6 +43,13 @@ export default class Station extends React.Component {
           .logo {
             width: 150px;
           }
+
+          @media only screen and (max-width: 540px) {
+            .station {
+              width: 90%;
+              margin: 0.5em;
+            }
+          }
         `}</style>
       </div>
     )
