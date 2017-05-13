@@ -31,5 +31,6 @@ app.prepare()
 
 async function getStreamURL (stationId) {
   const stream = (await iheart.streams(stationId))[0]
+  console.log(JSON.stringify(stream))
   return await iheart.streamURL(stream)
 }
