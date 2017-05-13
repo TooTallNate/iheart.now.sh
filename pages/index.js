@@ -70,11 +70,17 @@ export default class Search extends React.Component {
   }
 
   render () {
+    let title
     const { nowPlaying } = this.state
+    if (nowPlaying) {
+      title = `► ${nowPlaying.name}`
+    } else {
+      title = 'iHeart Radio Search'
+    }
     return (
       <div style={{ textAlign: 'center', padding: 40 }}>
         <Head>
-          <title>iHeart Radio Search</title>
+          <title>{ title }</title>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, height=device-height" />
         </Head>
