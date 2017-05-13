@@ -49,15 +49,15 @@ export default class Search extends React.Component {
 
   onPlayClick(e) {
     const id = e.currentTarget.getAttribute('data-id') | 0
-
     this.stop()
 
     const url = `/stream/${id}`
     this.audio.src = url
     this.audio.play()
 
+    const station = this.props.stations.filter(station => station.id === id)[0]
     this.setState({
-      nowPlaying: id
+      nowPlaying: station
     })
   }
 
@@ -96,7 +96,7 @@ export default class Search extends React.Component {
           <Station
             key={ station.id }
             station={ station }
-            nowPlaying={ nowPlaying === station.id }
+            nowPlaying={ nowPlaying && nowPlaying.id === station.id }
             onClick={ this.onPlayClick }
             />
         ))}
