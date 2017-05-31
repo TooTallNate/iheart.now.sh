@@ -12,7 +12,7 @@ app.prepare()
     if (req.method === 'GET' && /^\/stream/.test(req.url)) {
       const id = req.url.split('/').pop() | 0
       const url = await getStreamURL(id)
-      console.log(`${id} -> ${url}`)
+      console.log(JSON.stringify({ id, url }))
 
       // Redirect
       res.statusCode = 302
