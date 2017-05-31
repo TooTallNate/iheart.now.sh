@@ -17,6 +17,10 @@ app.prepare()
       // Redirect
       res.statusCode = 302
       res.setHeader('Location', url)
+
+      // Cache the redirect in the browser for 1 minute
+      res.setHeader('Cache-Control', 'max-age=60')
+
       res.end()
     } else {
       handle(req, res)
