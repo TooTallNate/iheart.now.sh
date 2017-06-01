@@ -53,10 +53,6 @@ async function getStreamURL (stationId) {
 async function isICY (url) {
   const parsed = parse(url)
 
-  const secure = 'https:' === parsed.protocol
-  const host = parsed.host
-  const port = parsed.port || (secure ? 443 : 80)
-
   const payload = [
     `GET ${parsed.path} HTTP/1.1`,
     `Host: ${parsed.host}`,
@@ -64,6 +60,9 @@ async function isICY (url) {
     'Accept: *\/*',
   ].join('\r\n') + '\r\n\r\n'
 
+  const host = parsed.hostname
+  const secure = 'https:' === parsed.protocol
+  const port = parsed.port || (secure ? 443 : 80)
   const socket = await connect(secure ? tls : net, { host, port })
   socket.write(payload)
 
