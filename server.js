@@ -43,40 +43,6 @@ async function getStreamURL (stationId) {
   const stream = (await iheart.streams(stationId))[0]
   console.log(JSON.stringify(stream))
 
-  let url = await iheart.streamURL(stream)
-  if (await isICY(url)) {
-    url = `${ICY_PROXY}${url}`
-  }
+  const url = await iheart.streamURL(stream)
   return url
-}
-
-async function isICY (url) {
-  const parsed = parse(url)
-
-  const payload = [
-    `GET ${parsed.path} HTTP/1.1`,
-    `Host: ${parsed.host}`,
-    //'User-Agent: curl',
-    'Accept: *\/*',
-  ].join('\r\n') + '\r\n\r\n'
-
-  const host = parsed.hostname
-  const secure = 'https:' === parsed.protocol
-  const port = parsed.port || (secure ? 443 : 80)
-  const socket = await connect(secure ? tls : net, { host, port })
-  socket.write(payload)
-
-  const firstChunk = await once(socket, 'data')
-  const firstSpace = firstChunk.indexOf(0x20)
-  const method = firstChunk.slice(0, firstSpace).toString('ascii').toUpperCase()
-
-  socket.destroy()
-
-  return 'ICY' === method
-}
-
-function connect (mod, opts) {
-  return new Promise((resolve, reject) => {
-    const socket = mod.connect(opts, (err) => err ? reject(err) : resolve(socket))
-  })
 }
