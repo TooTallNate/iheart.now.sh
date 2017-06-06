@@ -83,6 +83,8 @@ export default class Search extends React.Component {
           <title>{ title }</title>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, height=device-height" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-title" content="iHeart Radio Search" />
         </Head>
 
         <h1>iHeart Radio Search</h1>
