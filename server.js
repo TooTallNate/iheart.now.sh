@@ -17,7 +17,7 @@ app.prepare()
   const server = micro(async (req, res) => {
     if (req.method === 'GET' && /^\/stream/.test(req.url)) {
       const id = req.url.split('/').pop() | 0
-      const url = await getStreamURL(id)
+      const url = await iheart.streamURL(id)
       console.log(JSON.stringify({ id, url }))
 
       // Redirect
@@ -38,11 +38,3 @@ app.prepare()
     console.log('> Ready on http://localhost:3000')
   })
 })
-
-async function getStreamURL (stationId) {
-  const stream = (await iheart.streams(stationId))[0]
-  console.log(JSON.stringify(stream))
-
-  const url = await iheart.streamURL(stream)
-  return url
-}
