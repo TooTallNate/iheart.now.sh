@@ -23,7 +23,7 @@
     "debounce": "^1.0.2",
     "debug": "^2.6.6",
     "event-to-promise": "^0.8.0",
-    "iheart": "^2.0.0",
+    "iheart": "^2.0.1",
     "micro": "^7.3.3",
     "next": "^2.3.1",
     "prop-types": "^15.5.8",
