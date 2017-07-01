@@ -1,16 +1,10 @@
-const net = require('net')
-const tls = require('tls')
 const next = require('next')
 const micro = require('micro')
 const iheart = require('iheart')
-const once = require('event-to-promise')
-const { parse } = require('url')
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
-
-const ICY_PROXY = 'https://icy.n8.io/'
 
 app.prepare()
 .then(() => {
