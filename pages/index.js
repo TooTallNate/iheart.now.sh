@@ -4,9 +4,9 @@ import debounce from 'debounce'
 import createDebug from 'debug'
 import * as iheart from 'iheart'
 
-import { FONT_FAMILY_SANS } from '../components/css-config'
-import Input from '../components/input'
-import Station from '../components/station'
+import Logo from '../components/Logo'
+import Input from '../components/Input'
+import Station from '../components/Station'
 
 const debug = createDebug('iheart:Search')
 
@@ -81,36 +81,38 @@ export default class Search extends React.Component {
         <Head>
           <title>{ title }</title>
           <meta charset="UTF-8" />
+          <link href="https://sf.n8.io/_.css" rel="stylesheet" />
           <meta name="viewport" content="width=device-width, height=device-height" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-title" content="iHeart Radio Search" />
         </Head>
 
-        <h1>iHeart Radio Search</h1>
+        <div className="header">
+          <Logo />
 
-        <Input
-          className="search"
-          autofocus
-          centered
-          select
-          onValue={ this.onSearchInput }
-          value={ this.props.search }
-          />
-
-        <br />
-
-        {this.props.stations.map(station => (
-          <Station
-            key={ station.id }
-            station={ station }
-            nowPlaying={ nowPlaying && nowPlaying.id === station.id }
-            onClick={ this.onPlayClick }
+          <Input
+            className="search"
+            autofocus
+            centered
+            select
+            onValue={ this.onSearchInput }
+            value={ this.props.search }
             />
-        ))}
+        </div>
+
+        <div className="stations">
+          {this.props.stations.map(station => (
+            <Station
+              key={ station.id }
+              station={ station }
+              nowPlaying={ nowPlaying && nowPlaying.id === station.id }
+              onClick={ this.onPlayClick }
+              />
+          ))}
+        </div>
 
         <style jsx>{`
           div, h1, h2 {
-            font-family: ${FONT_FAMILY_SANS};
+            font-family: 'San Francisco';
           }
 
           .root {
