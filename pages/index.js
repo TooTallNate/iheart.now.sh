@@ -24,7 +24,7 @@ export default class Search extends React.Component {
     this.onSearchInput = debounce(this.onSearchInput.bind(this), 200)
   }
 
-  static async getInitialProps ({ query }) {
+  static async getInitialProps({ query }) {
     let { search } = query
     if (!search) {
       search = 'San Francisco'
@@ -68,7 +68,7 @@ export default class Search extends React.Component {
     })
   }
 
-  render () {
+  render() {
     let title
     const { nowPlaying } = this.state
     if (nowPlaying) {

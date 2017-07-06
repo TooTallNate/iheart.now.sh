@@ -7,6 +7,7 @@ export default function Logo() {
       <style jsx>{`
         .logo {
           border: solid 1.2px black;
+          letter-spacing: 0.1em;
           padding: 6px;
           text-transform: uppercase;
           user-select: none;
