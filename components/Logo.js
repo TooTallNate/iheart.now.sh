@@ -8,7 +8,7 @@ export default function Logo() {
         .logo {
           border: solid 1.2px black;
           letter-spacing: 0.1em;
-          padding: 6px;
+          padding: 8px;
           text-transform: uppercase;
           user-select: none;
         }
