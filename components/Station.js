@@ -1,20 +1,35 @@
-export default function Station({ station, nowPlaying, onClick }) {
+import Heart from './icons/Heart'
+
+export default function Station({ station, nowPlaying, favorite, onClick, onFavorite }) {
   let className = 'station'
   if (nowPlaying) {
     className += ' now-playing'
   }
+  if (favorite) {
+    className += ' favorite'
+  }
 
   const logo = `https://cors.now.sh/${station.newlogo}`
+
+  let call = station.callLetters
+  if (station.frequency && station.band) {
+    let freq = station.frequency
+    if (station.band === 'AM') {
+      freq = Math.round(freq)
+    }
+    call = call.replace('-' + station.band, ` - ${freq} ${station.band}`)
+  }
 
   return (
     <div className={ className } onClick={ onClick } data-id={ station.id }>
       <div className="logo">
+        <Heart onClick={ onFavorite } />
         <img src={ logo } />
       </div>
       <div className="info">
         <h2>{ station.name }</h2>
         <h3>{ station.description }</h3>
-        <div className="details">{ `${station.callLetters} - ${station.city}, ${station.state}` }</div>
+        <div className="details">{ `${call} - ${station.city}, ${station.state}` }</div>
       </div>
 
       <style jsx>{`
@@ -24,16 +39,12 @@ export default function Station({ station, nowPlaying, onClick }) {
           display: inline-block;
           margin: 1em;
           width: 250px;
+          position: relative;
         }
 
         .station,
         .station .info {
           transition: border-color 100ms ease-in;
-        }
-
-        .station:hover,
-        .station:hover .info {
-          border-color: #777;
         }
 
         .info {
@@ -63,20 +74,47 @@ export default function Station({ station, nowPlaying, onClick }) {
           font-size: 0.75em;
         }
 
-        .station.now-playing {
-          border-color: #067DF7;
-          border-width: 2px;
-        }
-
         .logo img {
           width: 60%;
+          user-select: none;
         }
 
-        @media only screen and (max-width: 540px) {
-          .station {
-            width: 90%;
-            margin: 0.5em;
-          }
+        .logo :global(.heart) {
+          width: 1em;
+          position: absolute;
+          top: 1em;
+          left: 1em;
+          opacity: 0;
+          transition: opacity 100ms ease-in, fill 100ms ease-in;
+          stroke: black;
+          stroke-width: 1px;
+          fill: #ddd;
+        }
+
+        /* on hover */
+        .station:hover,
+        .station:hover .info {
+          border-color: #777;
+        }
+
+        .station:hover :global(.heart) {
+          opacity: 1;
+        }
+
+        .station :global(.heart):hover {
+          fill: #aaa;
+        }
+
+        /* now playing */
+        .station.now-playing,
+        .station.now-playing .info {
+          border-color: #067DF7;
+        }
+
+        /* favorite */
+        .station.favorite :global(.heart) {
+          opacity: 1;
+          fill: red;
         }
       `}</style>
     </div>

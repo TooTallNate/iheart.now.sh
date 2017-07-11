@@ -1,3 +1,4 @@
+import store from 'store'
 import Head from 'next/head'
 import Router from 'next/router'
 import debounce from 'debounce'
@@ -6,7 +7,9 @@ import * as iheart from 'iheart'
 
 import Logo from '../components/Logo'
 import Input from '../components/Input'
+import Example from '../components/Example'
 import Station from '../components/Station'
+import SearchIcon from '../components/icons/Search'
 
 const debug = createDebug('iheart:Search')
 
@@ -17,25 +20,37 @@ export default class Search extends React.Component {
     this.audio = null
 
     this.state = {
-      nowPlaying: null
+      nowPlaying: null,
+      favorites: null
     }
 
     this.onPlayClick = this.onPlayClick.bind(this)
+    this.onFavorite = this.onFavorite.bind(this)
     this.onSearchInput = debounce(this.onSearchInput.bind(this), 200)
   }
 
   static async getInitialProps({ query }) {
-    let { search } = query
-    if (!search) {
-      search = 'San Francisco'
-      debug('using default search value: %o', search)
+    const { search } = query
+    let stations
+    if (search) {
+      ({ stations } = await iheart.search(search))
+    } else if (process.browser) {
     }
-    const { stations } = await iheart.search(search)
-    return { stations, search }
+    return { stations, search, query }
   }
 
   componentDidMount() {
+    let favorites
     this.audio = new Audio
+
+    const favs = store.get('iheart:favorites')
+    if (favs) {
+      favorites = new Set(favs.split(',').map(Number))
+    } else {
+      favorites = new Set
+    }
+
+    this.setState({ favorites })
   }
 
   componentWillUnmount() {
@@ -47,7 +62,7 @@ export default class Search extends React.Component {
   }
 
   onPlayClick(e) {
-    const id = e.currentTarget.getAttribute('data-id') | 0
+    const id = e.currentTarget.dataset.id | 0
     this.stop()
 
     const url = `/stream/${id}`
@@ -55,27 +70,71 @@ export default class Search extends React.Component {
     this.audio.play()
 
     const station = this.props.stations.filter(station => station.id === id)[0]
-    this.setState({
-      nowPlaying: station
-    })
+    this.setState({ nowPlaying: station })
+  }
+
+  onFavorite(e) {
+    e.stopPropagation()
+    const station = e.currentTarget.closest('.station')
+    const id = station.dataset.id | 0
+    const { favorites } = this.state
+
+    if (favorites.has(id)) {
+      favorites.delete(id)
+    } else {
+      favorites.add(id)
+    }
+
+    store.set('iheart:favorites', Array.from(favorites).join(','))
+    this.setState({ favorites })
   }
 
   stop() {
     this.audio.pause()
     this.audio.currentTime = 0
-    this.setState({
-      nowPlaying: null
-    })
+    this.setState({ nowPlaying: null })
   }
 
   render() {
     let title
-    const { nowPlaying } = this.state
+    const { favorites, nowPlaying } = this.state
+    const { stations = [], search } = this.props
+
     if (nowPlaying) {
       title = `► ${nowPlaying.name}`
     } else {
       title = 'iHeart Radio Search'
     }
+
+    let s
+    if (stations.length) {
+      s = stations.map(station => (
+        <Station
+          key={ station.id }
+          station={ station }
+          favorite={ favorites && favorites.has(station.id) }
+          nowPlaying={ nowPlaying && nowPlaying.id === station.id }
+          onClick={ this.onPlayClick }
+          onFavorite={ this.onFavorite }
+        />
+      ))
+    } else if (search) {
+      s = 'No results'
+    } else {
+      s = <div className="">
+        <p>
+          Use the search bar!<br />
+          For example:
+        </p>
+        <p>
+          <Example>San Francisco</Example><br />
+          <Example>New York</Example><br />
+          <Example>Rap</Example><br />
+          <Example>Rock</Example>
+        </p>
+      </div>
+    }
+
     return (
       <div className="root">
         <Head>
@@ -90,25 +149,18 @@ export default class Search extends React.Component {
           <Logo />
 
           <Input
-            className="search"
             autofocus
-            centered
             select
+            className="station-search"
             onValue={ this.onSearchInput }
-            value={ this.props.search }
-            />
+            prefix={ <SearchIcon /> }
+            value={ search }
+            width='200px'
+          />
+
         </div>
 
-        <div className="stations">
-          {this.props.stations.map(station => (
-            <Station
-              key={ station.id }
-              station={ station }
-              nowPlaying={ nowPlaying && nowPlaying.id === station.id }
-              onClick={ this.onPlayClick }
-              />
-          ))}
-        </div>
+        <div className="stations">{ s }</div>
 
         <style jsx>{`
           div, h1, h2 {
@@ -120,14 +172,24 @@ export default class Search extends React.Component {
             padding: 40px;
           }
 
-          .search {
-            margin: 1em;
+          .header {
+            margin-bottom: 2em;
           }
 
-          @media only screen and (max-width: 540px) {
-            .root {
-              padding: 10px;
-            }
+          .header :global(.station-search) {
+            vertical-align: middle;
+            position: absolute;
+            left: 40px;
+          }
+
+          .header :global(.icon.search) {
+            width: 0.9em;
+            position: relative;
+            top: 0.25em;
+          }
+
+          .header :global(.has-prefix) {
+            margin-left: 0.2em;
           }
         `}</style>
       </div>

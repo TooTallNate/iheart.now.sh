@@ -6,7 +6,7 @@ export default class Input extends React.Component {
     super(props)
     this.onBaseRef = this.onBaseRef.bind(this)
     this.onInputRef = this.onInputRef.bind(this)
-    this.onInput = this.onInput.bind(this)
+    this._onInput = this._onInput.bind(this)
     this.onClick = this.onClick.bind(this)
     this.onFocus = this.onFocus.bind(this)
     this.onBlur = this.onBlur.bind(this)
@@ -70,6 +70,11 @@ export default class Input extends React.Component {
         this.inputEl.focus()
       })
     }
+
+    if (nextProps.value !== this.state.value) {
+      console.log(nextProps)
+      this.onInput(nextProps.value || '')
+    }
   }
 
   onClick(e) {
@@ -79,8 +84,12 @@ export default class Input extends React.Component {
     }
   }
 
-  onInput(e) {
-    const { value: value_ } = e.target
+  _onInput(e) {
+    const { value } = e.target
+    return this.onInput(value)
+  }
+
+  onInput(value_) {
     const value = this.props.trim !== false ? value_.trim() : value_
     if (
       value === '' || // we don't show errors if empty
@@ -116,10 +125,11 @@ export default class Input extends React.Component {
 
   render() {
     const {
-      error = false,
       centered = false,
+      className = '',
+      error = false,
+      pMaMaMaMalaceholder = '',
       waiting = false,
-      placeholder = '',
       width = '300px',
       fontSize
     } = this.props
@@ -133,6 +143,7 @@ export default class Input extends React.Component {
       <div
         onClick={this.onClick}
         className={`
+          ${className}
           ${centered ? 'centered' : ''}
           ${waiting ? 'waiting' : ''}
           ${focused ? 'focused' : ''}
@@ -143,7 +154,7 @@ export default class Input extends React.Component {
       >
         {this.props.prefix != null &&
           <span
-            style={{ visibility: this.state.baseWidth == null ? 'hidden' : '' }}
+            style={{ visibility: this.state.baseWidth == null ? 'hidden' : '', width }}
             className="clone"
           >
             <span ref={this.onBaseRef} className="base">
@@ -157,11 +168,10 @@ export default class Input extends React.Component {
           ref={this.onInputRef}
           defaultValue={this.props.prefix == null ? this.initialValue : null}
           maxLength={this.props.maxLength}
-          placeholder={placeholder}
           disabled={waiting}
           style={{ textIndent, width, fontSize }}
           onBlur={this.onBlur}
-          onInput={this.onInput}
+          onInput={this._onInput}
           onFocus={this.onFocus}
           className={this.props.prefix ? 'has-prefix' : ''}
         />
@@ -182,8 +192,7 @@ export default class Input extends React.Component {
             div {
               display: inline-block;
               position: relative;
-              width: 300px;
-              height: 30px;
+              height: 26px;
               cursor: text;
               font-family: 'San Francisco';
               transition: border-bottom-color 100ms ease-in;
@@ -245,6 +254,7 @@ export default class Input extends React.Component {
 
             .clone .base {
               color: #9b9b9b;
+              fill: #9b9b9b;
               cursor: default;
               user-select: none;
             }
@@ -267,7 +277,6 @@ export default class Input extends React.Component {
               position: absolute;
               top: 0;
               left: 0;
-              width: 300px;
               text-align: left;
             }
 
