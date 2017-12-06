@@ -128,7 +128,7 @@ export default class Input extends React.Component {
       centered = false,
       className = '',
       error = false,
-      pMaMaMaMalaceholder = '',
+      placeholder = '',
       waiting = false,
       width = '300px',
       fontSize
