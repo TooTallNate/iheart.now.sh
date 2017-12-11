@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "NODE_ENV=production next"
+    "start": "next start"
   },
   "keywords": [
     "iheart",
@@ -20,11 +20,12 @@
     "alias": "iheart.now.sh"
   },
   "dependencies": {
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
     "debounce": "^1.1.0",
     "debug": "3",
-    "iheart": "^2.0.1",
+    "iheart": "^3.0.0",
     "next": "^4.2.0",
-    "prop-types": "^15.5.8",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "store": "^2.0.12"

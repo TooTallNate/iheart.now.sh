@@ -11,7 +11,7 @@ import Example from '../components/Example'
 import Station from '../components/Station'
 import SearchIcon from '../components/icons/Search'
 
-const debug = createDebug('iheart:Search')
+const debug = createDebug('iheart:pages:index')
 
 export default class Search extends React.Component {
   constructor(props) {
@@ -29,14 +29,12 @@ export default class Search extends React.Component {
     this.onSearchInput = debounce(this.onSearchInput.bind(this), 200)
   }
 
-  static async getInitialProps({ query }) {
-    const { search } = query
+  static async getInitialProps({ query: { search } }) {
     let stations
     if (search) {
       ({ stations } = await iheart.search(search))
-    } else if (process.browser) {
     }
-    return { stations, search, query }
+    return { stations, search }
   }
 
   componentDidMount() {
@@ -154,6 +152,7 @@ export default class Search extends React.Component {
           <Input
             autofocus
             select
+            trim
             className="station-search"
             onValue={ this.onSearchInput }
             prefix={ <SearchIcon /> }
