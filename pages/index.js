@@ -166,10 +166,6 @@ export default class Search extends React.Component {
         <div className="stations">{ s }</div>
 
         <style jsx>{`
-          div, h1, h2 {
-            font-family: 'San Francisco';
-          }
-
           .root {
             text-align: center;
             padding: 40px;
@@ -193,6 +189,12 @@ export default class Search extends React.Component {
 
           .header :global(.has-prefix) {
             margin-left: 0.2em;
+          }
+        `}</style>
+
+        <style global jsx>{`
+          html, body {
+            font-family: 'San Francisco', sans-serif;
           }
         `}</style>
       </div>
