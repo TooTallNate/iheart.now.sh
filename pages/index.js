@@ -96,12 +96,14 @@ export default class Search extends React.Component {
   }
 
   render() {
+    let favicon
     let title
     const { favorites, nowPlaying } = this.state
     const { stations = [], search } = this.props
 
     if (nowPlaying) {
       title = `► ${nowPlaying.name}`
+      favicon = <link rel="shortcut icon" href={`https://cors.now.sh/${nowPlaying.newlogo}`} />
     } else {
       title = 'iHeart Radio Search'
     }
@@ -140,6 +142,7 @@ export default class Search extends React.Component {
         <Head>
           <title>{ title }</title>
           <meta charset="UTF-8" />
+          { favicon }
           <link href="https://sf.n8.io/_.css" rel="stylesheet" />
           <meta name="viewport" content="width=device-width, height=device-height" />
           <meta name="apple-mobile-web-app-title" content="iHeart Radio Search" />
