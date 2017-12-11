@@ -1,6 +1,3 @@
-import PropTypes from 'prop-types'
-import React from 'react'
-
 export default class Input extends React.Component {
   constructor(props) {
     super(props)
@@ -72,7 +69,6 @@ export default class Input extends React.Component {
     }
 
     if (nextProps.value !== this.state.value) {
-      console.log(nextProps)
       this.onInput(nextProps.value || '')
     }
   }
@@ -91,6 +87,11 @@ export default class Input extends React.Component {
 
   onInput(value_) {
     const value = this.props.trim !== false ? value_.trim() : value_
+
+    if (this.inputEl) {
+      this.inputEl.value = value
+    }
+
     if (
       value === '' || // we don't show errors if empty
       (this.props.validate ? this.props.validate.test(value) : true)
@@ -138,7 +139,7 @@ export default class Input extends React.Component {
     const count = this.state.value !== null ? this.state.value.length : 0
     const textIndent =
       this.state.baseWidth != null ? this.state.baseWidth : null
-    const dark = this.context.darkBg
+    const dark = Boolean(this.context.darkBg)
     return (
       <div
         onClick={this.onClick}
@@ -367,7 +368,7 @@ export default class Input extends React.Component {
     )
   }
 
-  componenWillUnmount() {
+  componentWillUnmount() {
     if (this.measurementTask !== null) {
       cancelAnimationFrame(this.measurementTask)
       this.measurementTask = null
@@ -377,8 +378,4 @@ export default class Input extends React.Component {
       this.focusTask = null
     }
   }
-}
-
-Input.contextTypes = {
-  darkBg: PropTypes.bool
 }
