@@ -1,55 +1,55 @@
 export default class Input extends React.Component {
   constructor(props) {
-    super(props)
-    this.onBaseRef = this.onBaseRef.bind(this)
-    this.onInputRef = this.onInputRef.bind(this)
-    this._onInput = this._onInput.bind(this)
-    this.onClick = this.onClick.bind(this)
-    this.onFocus = this.onFocus.bind(this)
-    this.onBlur = this.onBlur.bind(this)
+    super(props);
+    this.onBaseRef = this.onBaseRef.bind(this);
+    this.onInputRef = this.onInputRef.bind(this);
+    this._onInput = this._onInput.bind(this);
+    this.onClick = this.onClick.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
     this.state = {
       baseWidth: null,
       value: this.props.value != null ? this.props.value : null,
       invalidCharacters: false
-    }
-    this.focusTask = null
-    this.measurementTask = null
-    this.initialValue = this.props.value
-    this.baseEl = null
-    this.inputEl = null
+    };
+    this.focusTask = null;
+    this.measurementTask = null;
+    this.initialValue = this.props.value;
+    this.baseEl = null;
+    this.inputEl = null;
   }
 
   componentDidMount() {
     if (this.props.prefix != null) {
       if (this.state.baseWidth === null) {
         this.measurementTask = requestAnimationFrame(() => {
-          const w = this.baseEl.getBoundingClientRect().width
-          this.setState({ baseWidth: w })
-          this.measurementTask = null
-        })
+          const w = this.baseEl.getBoundingClientRect().width;
+          this.setState({ baseWidth: w });
+          this.measurementTask = null;
+        });
       }
     }
   }
 
   onBaseRef(el) {
-    this.baseEl = el
+    this.baseEl = el;
   }
 
   onInputRef(el) {
-    this.inputEl = el
+    this.inputEl = el;
 
     if (el) {
       if (this.initialValue != null) {
-        el.value = this.initialValue
-        this.initialValue = null
+        el.value = this.initialValue;
+        this.initialValue = null;
       }
 
       if (this.props.autofocus) {
-        el.focus()
+        el.focus();
       }
 
       if (this.props.select) {
-        el.select()
+        el.select();
       }
     }
   }
@@ -64,32 +64,32 @@ export default class Input extends React.Component {
       (!this.props.autofocus || (this.props.waiting && !nextProps.waiting))
     ) {
       this.focusTask = requestAnimationFrame(() => {
-        this.inputEl.focus()
-      })
+        this.inputEl.focus();
+      });
     }
 
     if (nextProps.value !== this.state.value) {
-      this.onInput(nextProps.value || '')
+      this.onInput(nextProps.value || '');
     }
   }
 
   onClick(e) {
-    if (!this.inputEl) return
+    if (!this.inputEl) return;
     if (e.target !== this.inputEl) {
-      this.inputEl.focus()
+      this.inputEl.focus();
     }
   }
 
   _onInput(e) {
-    const { value } = e.target
-    return this.onInput(value)
+    const { value } = e.target;
+    return this.onInput(value);
   }
 
   onInput(value_) {
-    const value = this.props.trim !== false ? value_.trim() : value_
+    const value = this.props.trim !== false ? value_.trim() : value_;
 
     if (this.inputEl) {
-      this.inputEl.value = value
+      this.inputEl.value = value;
     }
 
     if (
@@ -99,29 +99,29 @@ export default class Input extends React.Component {
       this.setState({
         value: value,
         invalidCharacters: false
-      })
-      this.props.onValue && this.props.onValue(null, value)
+      });
+      this.props.onValue && this.props.onValue(null, value);
     } else {
       this.setState({
         value: value,
         invalidCharacters: true
-      })
+      });
       this.props.onValue &&
-        this.props.onValue(new Error('Validation error'), value)
+        this.props.onValue(new Error('Validation error'), value);
     }
   }
 
   onFocus() {
-    this.setState({ focused: true })
+    this.setState({ focused: true });
   }
 
   onBlur() {
-    this.setState({ focused: false })
+    this.setState({ focused: false });
   }
 
   getValue() {
-    const { value: value_ } = this.inputEl
-    return this.props.trim !== false ? value_.trim() : value_
+    const { value: value_ } = this.inputEl;
+    return this.props.trim !== false ? value_.trim() : value_;
   }
 
   render() {
@@ -133,13 +133,13 @@ export default class Input extends React.Component {
       waiting = false,
       width = '300px',
       fontSize
-    } = this.props
-    const { invalidCharacters, focused } = this.state
-    const hasError = error || invalidCharacters
-    const count = this.state.value !== null ? this.state.value.length : 0
+    } = this.props;
+    const { invalidCharacters, focused } = this.state;
+    const hasError = error || invalidCharacters;
+    const count = this.state.value !== null ? this.state.value.length : 0;
     const textIndent =
-      this.state.baseWidth != null ? this.state.baseWidth : null
-    const dark = Boolean(this.context.darkBg)
+      this.state.baseWidth != null ? this.state.baseWidth : null;
+    const dark = Boolean(this.context.darkBg);
     return (
       <div
         onClick={this.onClick}
@@ -153,18 +153,20 @@ export default class Input extends React.Component {
         `}
         style={{ width }}
       >
-        {this.props.prefix != null &&
+        {this.props.prefix != null && (
           <span
-            style={{ visibility: this.state.baseWidth == null ? 'hidden' : '', width }}
+            style={{
+              visibility: this.state.baseWidth == null ? 'hidden' : '',
+              width
+            }}
             className="clone"
           >
             <span ref={this.onBaseRef} className="base">
               {this.props.prefix}
             </span>
-            <span className="value">
-              {this.state.value}
-            </span>
-          </span>}
+            <span className="value">{this.state.value}</span>
+          </span>
+        )}
         <input
           ref={this.onInputRef}
           defaultValue={this.props.prefix == null ? this.initialValue : null}
@@ -177,16 +179,14 @@ export default class Input extends React.Component {
           className={this.props.prefix ? 'has-prefix' : ''}
         />
         {false !== this.props.lengthIndicator &&
-          (this.props.maxLength != null || this.props.lengthIndicator) &&
-          <span className="counter">
-            <span className={`count count_${count}`}>
-              {count}
+          (this.props.maxLength != null || this.props.lengthIndicator) && (
+            <span className="counter">
+              <span className={`count count_${count}`}>{count}</span>
+              {this.props.maxLength != null && (
+                <span className="total">/{this.props.maxLength}</span>
+              )}
             </span>
-            {this.props.maxLength != null &&
-              <span className="total">
-                /{this.props.maxLength}
-              </span>}
-          </span>}
+          )}
         {waiting && <span className="waiting_anim" />}
         <style jsx>
           {`
@@ -342,7 +342,7 @@ export default class Input extends React.Component {
               animation-duration: 1s;
               animation-direction: alternate;
               animation-iteration-count: infinite;
-              animation-timing-function: cubic-bezier(0.0, 0.0, 1.0, 1.0);
+              animation-timing-function: cubic-bezier(0, 0, 1, 1);
             }
 
             @keyframes waiting {
@@ -365,17 +365,17 @@ export default class Input extends React.Component {
           `}
         </style>
       </div>
-    )
+    );
   }
 
   componentWillUnmount() {
     if (this.measurementTask !== null) {
-      cancelAnimationFrame(this.measurementTask)
-      this.measurementTask = null
+      cancelAnimationFrame(this.measurementTask);
+      this.measurementTask = null;
     }
     if (this.focusTask !== null) {
-      cancelAnimationFrame(this.focusTask)
-      this.focusTask = null
+      cancelAnimationFrame(this.focusTask);
+      this.focusTask = null;
     }
   }
 }

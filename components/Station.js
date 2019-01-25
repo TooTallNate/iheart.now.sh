@@ -1,35 +1,43 @@
-import Heart from './icons/Heart'
+import Heart from './icons/Heart';
 
-export default function Station({ station, nowPlaying, favorite, onClick, onFavorite }) {
-  let className = 'station'
+export default function Station({
+  station,
+  nowPlaying,
+  favorite,
+  onClick,
+  onFavorite
+}) {
+  let className = 'station';
   if (nowPlaying) {
-    className += ' now-playing'
+    className += ' now-playing';
   }
   if (favorite) {
-    className += ' favorite'
+    className += ' favorite';
   }
 
-  const logo = `https://cors.now.sh/${station.newlogo}`
+  const logo = `https://cors.now.sh/${station.newlogo}`;
 
-  let call = station.callLetters
+  let call = station.callLetters;
   if (station.frequency && station.band) {
-    let freq = station.frequency
+    let freq = station.frequency;
     if (station.band === 'AM') {
-      freq = Math.round(freq)
+      freq = Math.round(freq);
     }
-    call = call.replace('-' + station.band, ` - ${freq} ${station.band}`)
+    call = call.replace('-' + station.band, ` - ${freq} ${station.band}`);
   }
 
   return (
-    <div className={ className } onClick={ onClick } data-id={ station.id }>
+    <div className={className} onClick={onClick} data-id={station.id}>
       <div className="logo">
-        <Heart onClick={ onFavorite } />
-        <img src={ logo } />
+        <Heart onClick={onFavorite} />
+        <img src={logo} />
       </div>
       <div className="info">
-        <h2>{ station.name }</h2>
-        <h3>{ station.description }</h3>
-        <div className="details">{ `${call} - ${station.city}, ${station.state}` }</div>
+        <h2>{station.name}</h2>
+        <h3>{station.description}</h3>
+        <div className="details">{`${call} - ${station.city}, ${
+          station.state
+        }`}</div>
       </div>
 
       <style jsx>{`
@@ -53,7 +61,8 @@ export default function Station({ station, nowPlaying, favorite, onClick, onFavo
           padding: 1em;
         }
 
-        h2, h3 {
+        h2,
+        h3 {
           font-weight: normal;
         }
 
@@ -108,7 +117,7 @@ export default function Station({ station, nowPlaying, favorite, onClick, onFavo
         /* now playing */
         .station.now-playing,
         .station.now-playing .info {
-          border-color: #067DF7;
+          border-color: #067df7;
         }
 
         /* favorite */
@@ -118,5 +127,5 @@ export default function Station({ station, nowPlaying, favorite, onClick, onFavo
         }
       `}</style>
     </div>
-  )
+  );
 }
