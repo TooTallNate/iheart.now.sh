@@ -63,7 +63,7 @@ export default class Search extends React.Component {
     const id = e.currentTarget.dataset.id | 0
     this.stop()
 
-    const url = `https://iheart-api.now.sh/?id=${id}&redirect=1`
+    const url = `/api?id=${id}&redirect=1`
     this.audio.src = url
     this.audio.play()
 
